@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String second = ""; // second number
   int selected = 0; // currently selected number
 
-  double fontSize = 42.0; // current display front size
+  double fontSize = 52.0; // current display front size
 
   /// THis methods will update information into display
   /// selected -> currently selected item
@@ -66,16 +66,14 @@ class _MyHomePageState extends State<MyHomePage> {
       }
 
       //update font size
-      if (first.length > 8 || second.length > 8) {
-        fontSize = 32.0;
-      } else if (first.length > 10 || second.length > 10) {
-        fontSize = 28.0;
-      } else if (first.length > 15 || second.length > 10) {
-        fontSize = 28.0;
-      } else if (first.length > 20 || second.length > 10) {
-        fontSize = 25.0;
-      } else if (first.length < 10 || second.length < 10) {
+      if (first.length > 5 || second.length > 5) {
         fontSize = 42.0;
+      } else if (first.length > 10 || second.length > 10) {
+        fontSize = 32.0;
+      } else if (first.length > 13 || second.length > 13) {
+        fontSize = 28.0;
+      } else if (first.length < 5 || second.length < 5) {
+        fontSize = 52.0;
       }
     });
   }
@@ -290,7 +288,7 @@ class _MyHomePageState extends State<MyHomePage> {
       operation = "";
       second = "";
       selected = 0;
-      fontSize = 42.0;
+      fontSize = 52.0;
       string = "0";
     });
   }
