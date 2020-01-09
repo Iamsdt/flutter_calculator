@@ -56,15 +56,15 @@ class _MyHomePageState extends State<MyHomePage> {
       }
 
       //update font size
-      if (string.length > 5) {
+      if (first.length > 8 || second.length > 8) {
         fontSize = 32.0;
-      } else if (string.length > 10) {
+      } else if (first.length > 10 || second.length > 10) {
         fontSize = 28.0;
-      } else if (string.length > 15) {
+      } else if (first.length > 15 || second.length > 10) {
+        fontSize = 28.0;
+      } else if (first.length > 20 || second.length > 10) {
         fontSize = 25.0;
-      } else if (string.length > 20) {
-        fontSize = 20.0;
-      } else if (string.length < 5) {
+      } else if (first.length < 10 || second.length < 10) {
         fontSize = 42.0;
       }
     });
@@ -72,8 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void addNum(String s) {
     if (selected == 0) {
-      if(first=="0"){
-        if (s == "0"){
+      if (first == "0") {
+        if (s == "0") {
           first = s;
         } else {
           first = s;
@@ -82,13 +82,13 @@ class _MyHomePageState extends State<MyHomePage> {
         first += s;
       }
     } else if (selected == 1) {
-      if(second=="0"){
-        if (s == "0"){
+      if (second == "0") {
+        if (s == "0") {
           second = s;
         } else {
           second = s;
         }
-      } else{
+      } else {
         second += s;
       }
     }
@@ -145,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void add() {
     selected = 1;
-    if(prevResult != "0" && first.isEmpty){
+    if (prevResult != "0" && first.isEmpty) {
       first = prevResult;
     }
     prevResult = "0";
@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void minus() {
     selected = 1;
-    if(prevResult != "0" && first.isEmpty){
+    if (prevResult != "0" && first.isEmpty) {
       first = prevResult;
     }
     prevResult = "0";
@@ -165,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void div() {
     selected = 1;
-    if(prevResult != "0" && first.isEmpty){
+    if (prevResult != "0" && first.isEmpty) {
       first = prevResult;
     }
     prevResult = "0";
@@ -175,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void mul() {
     selected = 1;
-    if(prevResult != "0" && first.isEmpty){
+    if (prevResult != "0" && first.isEmpty) {
       first = prevResult;
     }
     prevResult = "0";
