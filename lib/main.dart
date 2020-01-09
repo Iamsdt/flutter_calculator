@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() => runApp(MyApp());
 
@@ -79,7 +78,11 @@ class _MyHomePageState extends State<MyHomePage> {
           first = s;
         }
       } else {
-        first += s;
+        if (first.length > 15) {
+          showWarning();
+        } else {
+          first += s;
+        }
       }
     } else if (selected == 1) {
       if (second == "0") {
@@ -89,10 +92,25 @@ class _MyHomePageState extends State<MyHomePage> {
           second = s;
         }
       } else {
-        second += s;
+        if (second.length > 15) {
+          showWarning();
+        } else {
+          second += s;
+        }
       }
     }
     updateResult(selected);
+  }
+
+  void showWarning() {
+    Fluttertoast.showToast(
+        msg: "Maximum number length is 15",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 2,
+        backgroundColor: Colors.white,
+        textColor: Colors.black,
+        fontSize: 16.0);
   }
 
   void calculate() {
@@ -199,6 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
           second = "";
           if (operation.isNotEmpty) {
             operation = "";
+            selected = 0;
           } else {
             selected = 0;
             first = first.substring(0, first.length - 1);
@@ -231,7 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black,
         body: Center(
           child: Column(children: <Widget>[
             Expanded(
