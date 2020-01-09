@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -26,33 +28,203 @@ class _MyHomePageState extends State<MyHomePage> {
   double getWidth(BuildContext context) =>
       MediaQuery.of(context).size.width / 4;
 
+  String string = "0";
   String result = "0";
+  String prevResult = "0";
   String first = "";
   String operation = "";
   String second = "";
   int selected = 0;
 
-  void updateResult(int selected) {}
+  double fontSize = 42.0;
 
-  void addNum(String s) {
+  void updateResult(int selected) {
     setState(() {
-      if (selected == 0) {
-        first += s;
-      } else if (selected == 1) {
-        second += s;
+      if (result != "0") {
+        string = result;
+        result = "0";
+      } else {
+        if (selected == 0) {
+          string = first;
+        } else if (selected == 1) {
+          if (second.isNotEmpty) {
+            string = first + "\n" + operation + "\n" + second;
+          } else if (operation.isNotEmpty) {
+            string = first + "\n" + operation;
+          }
+        }
       }
-      updateResult(selected);
+
+      //update font size
+      if (string.length > 5) {
+        fontSize = 32.0;
+      } else if (string.length > 10) {
+        fontSize = 28.0;
+      } else if (string.length > 15) {
+        fontSize = 25.0;
+      } else if (string.length > 20) {
+        fontSize = 20.0;
+      } else if (string.length < 5) {
+        fontSize = 42.0;
+      }
     });
   }
 
-  void calculate() {}
+  void addNum(String s) {
+    if (selected == 0) {
+      if(first=="0"){
+        if (s == "0"){
+          first = s;
+        } else {
+          first = s;
+        }
+      } else {
+        first += s;
+      }
+    } else if (selected == 1) {
+      if(second=="0"){
+        if (s == "0"){
+          second = s;
+        } else {
+          second = s;
+        }
+      } else{
+        second += s;
+      }
+    }
+    updateResult(selected);
+  }
+
+  void calculate() {
+    if (operation.isNotEmpty && second.isNotEmpty) {
+      double num1 = double.parse(first);
+      double num2 = double.parse(second);
+
+      double res = 0.0;
+
+      switch (operation) {
+        case "+":
+          res = num1 + num2;
+          break;
+        case "-":
+          res = num1 - num2;
+          break;
+        case "x":
+          res = num1 * num2;
+          break;
+        case "÷":
+          res = num1 / num2;
+          break;
+      }
+      setState(() {
+        if (first.contains(".") || operation == "÷") {
+          if (res > 100000) {
+            result = res.toStringAsExponential(2);
+          } else if (res < 0.009) {
+            result = res.toStringAsExponential(2);
+          } else {
+            result = res.toStringAsFixed(2);
+          }
+        } else {
+          if (res > 100000) {
+            result = res.toStringAsExponential(0);
+          } else {
+            result = res.toStringAsFixed(0);
+          }
+        }
+        prevResult = result;
+        selected = 0;
+        first = "";
+        second = "";
+        string = "";
+        operation = "";
+        updateResult(selected);
+      });
+    }
+  }
 
   void add() {
-    setState(() {});
+    selected = 1;
+    if(prevResult != "0" && first.isEmpty){
+      first = prevResult;
+    }
+    prevResult = "0";
+    operation = "+";
+    updateResult(selected);
   }
 
   void minus() {
-    setState(() {});
+    selected = 1;
+    if(prevResult != "0" && first.isEmpty){
+      first = prevResult;
+    }
+    prevResult = "0";
+    operation = "-";
+    updateResult(selected);
+  }
+
+  void div() {
+    selected = 1;
+    if(prevResult != "0" && first.isEmpty){
+      first = prevResult;
+    }
+    prevResult = "0";
+    operation = "÷";
+    updateResult(selected);
+  }
+
+  void mul() {
+    selected = 1;
+    if(prevResult != "0" && first.isEmpty){
+      first = prevResult;
+    }
+    prevResult = "0";
+    operation = "x";
+    updateResult(selected);
+  }
+
+  void back() {
+    setState(() {
+      if (selected == 0) {
+        if (first.length > 1) {
+          first = first.substring(0, first.length - 1);
+        } else {
+          first = "0";
+        }
+        updateResult(selected);
+      } else if (selected == 1) {
+        if (second.length > 1) {
+          second = second.substring(0, second.length - 1);
+        } else {
+          second = "";
+          if (operation.isNotEmpty) {
+            operation = "";
+          } else {
+            selected = 0;
+            first = first.substring(0, first.length - 1);
+          }
+        }
+
+        if (result != "0") {
+          result = "0";
+          string = "0";
+        }
+
+        updateResult(selected);
+      }
+    });
+  }
+
+  void clear() {
+    setState(() {
+      result = "";
+      first = "";
+      operation = "";
+      second = "";
+      selected = 0;
+      fontSize = 42.0;
+      string = "0";
+    });
   }
 
   @override
@@ -68,9 +240,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    result,
+                    string,
                     textAlign: TextAlign.end,
-                    style: getStyle(font: 42.0),
+                    style: getStyle(font: fontSize),
                   ),
                 ),
               ),
@@ -174,7 +346,32 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     void handleClick() {
-      //back
+      setState(() {
+        switch (string) {
+          case "add":
+            add();
+            break;
+          case "minus":
+            minus();
+            break;
+          case "x":
+            mul();
+            break;
+          case "÷":
+            div();
+            break;
+          case "back":
+            back();
+            break;
+          case "C":
+            clear();
+            break;
+          default:
+            {
+              addNum(string);
+            }
+        }
+      });
     }
 
     return InkWell(
