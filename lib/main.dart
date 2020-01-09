@@ -43,14 +43,18 @@ class _MyHomePageState extends State<MyHomePage> {
         string = result;
         result = "0";
       } else {
-        if (selected == 0) {
-          string = first;
-        } else if (selected == 1) {
-          if (second.isNotEmpty) {
-            string = first + "\n" + operation + "\n" + second;
-          } else if (operation.isNotEmpty) {
-            string = first + "\n" + operation;
-          }
+        switch (selected) {
+          case 0:
+            string = first;
+            break;
+          case 1:
+            {
+              if (second.isNotEmpty) {
+                string = first + "\n" + operation + "\n" + second;
+              } else if (operation.isNotEmpty) {
+                string = first + "\n" + operation;
+              }
+            }
         }
       }
 
@@ -70,34 +74,40 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void addNum(String s) {
-    if (selected == 0) {
-      if (first == "0") {
-        if (s == "0") {
-          first = s;
-        } else {
-          first = s;
+    switch (selected) {
+      case 0:
+        {
+          if (first == "0") {
+            if (s == "0") {
+              first = s;
+            } else {
+              first = s;
+            }
+          } else {
+            if (first.length > 15) {
+              showWarning();
+            } else {
+              first += s;
+            }
+          }
         }
-      } else {
-        if (first.length > 15) {
-          showWarning();
-        } else {
-          first += s;
+        break;
+      case 1:
+        {
+          if (second == "0") {
+            if (s == "0") {
+              second = s;
+            } else {
+              second = s;
+            }
+          } else {
+            if (second.length > 15) {
+              showWarning();
+            } else {
+              second += s;
+            }
+          }
         }
-      }
-    } else if (selected == 1) {
-      if (second == "0") {
-        if (s == "0") {
-          second = s;
-        } else {
-          second = s;
-        }
-      } else {
-        if (second.length > 15) {
-          showWarning();
-        } else {
-          second += s;
-        }
-      }
     }
     updateResult(selected);
   }
@@ -203,33 +213,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void back() {
     setState(() {
-      if (selected == 0) {
-        if (first.length > 1) {
-          first = first.substring(0, first.length - 1);
-        } else {
-          first = "0";
-        }
-        updateResult(selected);
-      } else if (selected == 1) {
-        if (second.length > 1) {
-          second = second.substring(0, second.length - 1);
-        } else {
-          second = "";
-          if (operation.isNotEmpty) {
-            operation = "";
-            selected = 0;
-          } else {
-            selected = 0;
-            first = first.substring(0, first.length - 1);
+      switch (selected) {
+        case 0:
+          {
+            if (first.length > 1) {
+              first = first.substring(0, first.length - 1);
+            } else {
+              first = "0";
+            }
+            updateResult(selected);
           }
-        }
-
-        if (result != "0") {
-          result = "0";
-          string = "0";
-        }
-
-        updateResult(selected);
+          break;
+        case 1:
+          {
+            if (second.length > 1) {
+              second = second.substring(0, second.length - 1);
+            } else {
+              second = "";
+              if (operation.isNotEmpty) {
+                operation = "";
+                selected = 0;
+              } else {
+                selected = 0;
+                first = first.substring(0, first.length - 1);
+              }
+            }
+            updateResult(selected);
+          }
       }
     });
   }
