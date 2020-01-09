@@ -24,25 +24,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  // This method will divide the total screen size into 4 parts
   double getWidth(BuildContext context) =>
       MediaQuery.of(context).size.width / 4;
 
-  String string = "0";
-  String result = "0";
-  String prevResult = "0";
-  String first = "";
-  String operation = "";
-  String second = "";
-  int selected = 0;
 
-  double fontSize = 42.0;
+  String string = "0"; //hold information to display
+  String result = "0"; // current operation result
+  String prevResult = "0"; // previous results need if user use again
+  String first = ""; // first number
+  String operation = ""; // math operation type
+  String second = ""; // second number
+  int selected = 0; // currently selected number
 
+  double fontSize = 42.0; // current display front size
+
+  /// THis methods will update information into display
+  /// selected -> currently selected item
   void updateResult(int selected) {
     setState(() {
+      // if result has some value then show the result
       if (result != "0") {
         string = result;
         result = "0";
       } else {
+        //otherwise show according to current number holder
         switch (selected) {
           case 0:
             string = first;
@@ -73,17 +80,21 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  /// This methods will add number from user input (on tap)
   void addNum(String s) {
     switch (selected) {
       case 0:
         {
+          // if first value is zero then replace current one
           if (first == "0") {
+            //if first is zero and input is also zero do same
             if (s == "0") {
               first = s;
             } else {
               first = s;
             }
           } else {
+            // if user input more than 15 number show warning
             if (first.length > 15) {
               showWarning();
             } else {
@@ -94,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case 1:
         {
+          //same like first
           if (second == "0") {
             if (s == "0") {
               second = s;
@@ -101,6 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
               second = s;
             }
           } else {
+            // if user input more than 15 number show warning
             if (second.length > 15) {
               showWarning();
             } else {
@@ -112,6 +125,8 @@ class _MyHomePageState extends State<MyHomePage> {
     updateResult(selected);
   }
 
+  // this methods will show an warning to the user
+  // thanks awesome library Fluttertoast
   void showWarning() {
     Fluttertoast.showToast(
         msg: "Maximum number length is 15",
@@ -123,6 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
         fontSize: 16.0);
   }
 
+  /// This methods will calculate and do mathematical operations
   void calculate() {
     if (operation.isNotEmpty && second.isNotEmpty) {
       double num1 = double.parse(first);
@@ -145,7 +161,12 @@ class _MyHomePageState extends State<MyHomePage> {
           break;
       }
       setState(() {
+        // if user input has . that means
+        // user input fraction value
+        // then show fraction result
+        // or if user did division then do same
         if (first.contains(".") || operation == "÷") {
+          // if result is larger or smaller then show Exponential
           if (res > 100000) {
             result = res.toStringAsExponential(2);
           } else if (res < 0.009) {
@@ -160,27 +181,39 @@ class _MyHomePageState extends State<MyHomePage> {
             result = res.toStringAsFixed(0);
           }
         }
+
+        //save results into previous
         prevResult = result;
+        //reset other values
         selected = 0;
         first = "";
         second = "";
         string = "";
         operation = "";
+        //update now
         updateResult(selected);
       });
     }
   }
 
+  /// This method will trigger when user hit add button
   void add() {
+    // is user click add button then switch number holder one to second
     selected = 1;
+    // if their is previous result and
+    // first number holder is empty
+    //then user want to do operation with this result
     if (prevResult != "0" && first.isEmpty) {
       first = prevResult;
     }
+    //remove previous result
     prevResult = "0";
+    // save operations
     operation = "+";
     updateResult(selected);
   }
 
+  // minus method
   void minus() {
     selected = 1;
     if (prevResult != "0" && first.isEmpty) {
@@ -191,6 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
     updateResult(selected);
   }
 
+  //division method
   void div() {
     selected = 1;
     if (prevResult != "0" && first.isEmpty) {
@@ -201,6 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
     updateResult(selected);
   }
 
+  //division method
   void mul() {
     selected = 1;
     if (prevResult != "0" && first.isEmpty) {
@@ -211,8 +246,11 @@ class _MyHomePageState extends State<MyHomePage> {
     updateResult(selected);
   }
 
+
+  // this method for back press
   void back() {
     setState(() {
+      //remove one number from current number holder
       switch (selected) {
         case 0:
           {
@@ -244,6 +282,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  /// this methods will clear all the data
   void clear() {
     setState(() {
       result = "";
@@ -358,6 +397,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// this methods will create a text widget
   Widget getText(string, {font = 32.0}) {
     return Text(
       string,
@@ -365,15 +405,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// this the helper method for text style
   TextStyle getStyle({font: 32.0}) {
     return TextStyle(color: Colors.white, fontSize: font);
   }
 
+  // main container widget
   Widget getContainer(string, {child, height = 80.0, font = 32.0}) {
+    // if child is null create text widget with passed string
     if (child == null) {
       child = getText(string, font: font);
     }
 
+    // click handler for all user actions
     void handleClick() {
       setState(() {
         switch (string) {
