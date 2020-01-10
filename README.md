@@ -1,16 +1,14 @@
-# calculator
+# Calculator
 
-A new Flutter project.
+A calculator project with complete functionality.
 
-## Getting Started
+# Screenshots
 
-This project is a starting point for a Flutter application.
+|Example 1| Example 2      |  Example 3    |  Example 4    |  Example 5     |
+| ----- | ---- | ---- | ---- | ---- |
+| <img src='img/pic4.png'/> | <img src='img/pic2.png'/>     |   <img src='img/pic3.png'/>   |   <img src='img/pic5.png'/>   |   <img src='img/pic6.png'/>   |
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### 3rd parties library
+- Flutter Toast
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
